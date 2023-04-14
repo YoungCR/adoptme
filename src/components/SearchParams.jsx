@@ -1,4 +1,5 @@
-import { useState } from 'react';
+/* eslint-disable no-shadow */
+import { useEffect, useState } from 'react';
 
 const ANIMALS = ['bird', 'cat', 'dog', 'rabbit', 'reptile'];
 
@@ -6,7 +7,21 @@ function SearchParams() {
   const [location, setLocation] = useState('Freedom, WI');
   const [animal, setAnimal] = useState('');
   const [breed, setBreed] = useState('');
+  const [pets, setPets] = useState([]);
   const breeds = [];
+
+  useEffect(() => {
+    requestPets();
+  });
+
+  async function requestPets() {
+    const res = await fetch(
+      `https://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}`
+    );
+    const json = await res.json();
+
+    setPets(json.pets);
+  }
 
   return (
     <div className="search-params">
